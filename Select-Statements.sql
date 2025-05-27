@@ -170,14 +170,21 @@ from organization.sales s
 );
 
 --question24
-select s.employee_id, e.first_name, e.last_name , sum(s.total)
-from organization.sales s, organization.employees e
-group by s.employee_id, e.first_name, e.last_name 
+select s.employee_id, e.first_name, e.last_name, SUM(s.total) AS total_sales
+from  organization.sales s
+JOIN organization.employees e
+ON s.employee_id = e.employee_id
+GROUP BY s.employee_id, e.first_name, e.last_name;
+
 
 -- question25
-select s.employee_id as high_earner,e.first_name, e.last_name, max(s.total) as highest_sales
-from organization.sales s, organization.employees e
-group by high_earner, e.first_name,e.last_name;
+SELECT s.employee_id, e.first_name, e.last_name, SUM(s.total) AS total_sales
+FROM organization.sales s
+JOIN organization.employees e
+on s.employee_id = e.employee_id
+GROUP BY  s.employee_id, e.first_name, e.last_name
+ORDER BY total_sales DESC
+LIMIT 1;
 
 --question26
 select  e.department, avg(s.quantity) as average_quantity
@@ -191,9 +198,23 @@ from organization.sales s
 where sales_date between '2020-12-31' and '2022-1-1';
 
 --question28
+SELECT s.employee_id, e.first_name, e.last_name, SUM(s.quantity) AS total_quantity
+FROM
+  organization.sales s, organization.employees e
+where s.employee_id = e.employee_id
+GROUP BY s.employee_id, e.first_name, e.last_name
+ORDER by total_quantity DESC
+LIMIT 3;
 
-limit 3;
+--question29
+select e.department, SUM(s.quantity) AS total_quantity
+from organization.sales s, organization.employees e
+group by e.department;
 
+--question30
+select p.category, sum(s.total) as revenue
+from organization.products p, organization.sales s
+group by p.category;
 
 
 
